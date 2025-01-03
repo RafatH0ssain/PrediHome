@@ -32,4 +32,15 @@ housing_df <- housing_df %>% filter(Type == "House and Land") %>%
               ) %>% ungroup() %>%  filter(year >= 1986)
 
 
-View(housing_df)
+#Cleaning employment_df dataset
+employment_df <- employment_df %>% filter(Age.group=="15 years and over") %>%
+                select(REF_DATE, Province=GEO, Employment.rate, Unemployment.rate) %>%
+                group_by(year = substr(REF_DATE, 1, 4), Province) %>% summarize(
+                  Employment.rate = mean(Employment.rate, na.rm = TRUE),
+                  Unemployment.rate = mean(Unemployment.rate, na.rm = TRUE)
+                )  %>% ungroup() %>%  filter(year >= 1986)
+
+#Joining the two datasets
+merged_df <- 
+
+View(merged_df)
