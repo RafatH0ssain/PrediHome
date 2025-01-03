@@ -6,8 +6,8 @@ library(tidyr)
 library(readr)
 
 # Load datasets
-housing_df <- read.csv("D:/projects/PrediHome/HPI 1981-2022 by regions.csv")
-employment_df <- read.csv("D:/projects/PrediHome/Unemployment_Canada_1976_present.csv")
+housing_df <- read.csv("HPI 1981-2022 by regions.csv")
+employment_df <- read.csv("Unemployment_Canada_1976_present.csv")
 
 # Inspect the datasets
 #View(employment_df)
