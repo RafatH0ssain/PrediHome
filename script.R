@@ -4,6 +4,7 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(readr)
+library(shiny)
 
 # Load datasets
 housing_df <- read.csv("HPI 1981-2022 by regions.csv")
@@ -31,7 +32,6 @@ housing_df <- housing_df %>% filter(Type == "House and Land") %>%
                 British.Columbia.HPI = mean(British.Columbia, na.rm = TRUE)
               ) %>% ungroup() %>%  filter(year >= 1986)
 
-
 #Cleaning employment_df dataset
 employment_df <- employment_df %>% filter(Age.group=="15 years and over") %>%
                 select(REF_DATE, Province=GEO, Employment.rate, Unemployment.rate) %>%
@@ -40,7 +40,6 @@ employment_df <- employment_df %>% filter(Age.group=="15 years and over") %>%
                   Unemployment.rate = mean(Unemployment.rate, na.rm = TRUE)
                 )  %>% ungroup() %>%  filter(year >= 1986) %>% filter(Province != 'Canada') %>%
                 pivot_wider(names_from = "Province", values_from = c("Employment.rate", "Unemployment.rate"))
-                
 
 #Joining the two datasets
 employment_df$year <- as.numeric(employment_df$year) #changed employment_db year's type to integer from character
@@ -48,3 +47,84 @@ merged_df <- inner_join(housing_df, employment_df, by = "year")
 
 
 View(merged_df)
+
+server <- function(input, output) {
+  
+  # Reactive expression to filter data for selected year
+  filtered_data <- reactive({
+    year_data <- merged_df %>% filter(year == input$year)
+    return(year_data)
+  })
+  
+  observeEvent(input$submit, {
+    # Get the filtered data for the selected year
+    data <- filtered_data()
+    
+    # Find the province with the lowest HPI
+    lowest_hpi <- data %>% 
+      select(ends_with("HPI")) %>%
+      summarise_all(min, na.rm = TRUE) %>%
+      pivot_longer(cols = everything(), names_to = "Province", values_to = "HPI") %>%
+      arrange(HPI) %>%
+      slice(1)
+    
+    output$lowest_hpi_province <- renderText({
+      paste("The province with the lowest HPI in", input$year, "is", lowest_hpi$Province)
+    })
+    
+    # Plot the HPI bar chart
+    output$hpi_barplot <- renderPlot({
+      ggplot(data, aes(x = reorder(Province, -HPI), y = HPI, fill = Province)) +
+        geom_bar(stat = "identity") +
+        theme_minimal() +
+        labs(x = "Province", y = "HPI", title = paste("HPI in", input$year)) +
+        coord_flip()
+    })
+    
+    # Find the province with the lowest Unemployment rate
+    lowest_unemployment <- data %>% 
+      select(starts_with("Unemployment.rate")) %>%
+      summarise_all(min, na.rm = TRUE) %>%
+      pivot_longer(cols = everything(), names_to = "Province", values_to = "Unemployment.rate") %>%
+      arrange(Unemployment.rate) %>%
+      slice(1)
+    
+    output$lowest_unemployment_province <- renderText({
+      paste("The province with the lowest Unemployment rate in", input$year, "is", lowest_unemployment$Province)
+    })
+    
+    # Plot the Unemployment rate bar chart
+    output$unemployment_barplot <- renderPlot({
+      ggplot(data, aes(x = reorder(Province, -Unemployment.rate), y = Unemployment.rate, fill = Province)) +
+        geom_bar(stat = "identity") +
+        theme_minimal() +
+        labs(x = "Province", y = "Unemployment Rate", title = paste("Unemployment Rate in", input$year)) +
+        coord_flip()
+    })
+  })
+}
+
+
+ui <- fluidPage(
+  titlePanel("PrediHome: Province Prediction"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      # Input: Select Year
+      numericInput("year", "Select Year:", value = 2000, min = 1986, max = 2022),
+      actionButton("submit", "Submit")
+    ),
+    
+    mainPanel(
+      h3("Province with Lowest HPI"),
+      textOutput("lowest_hpi_province"),
+      plotOutput("hpi_barplot"),
+      
+      h3("Province with Lowest Unemployment Rate"),
+      textOutput("lowest_unemployment_province"),
+      plotOutput("unemployment_barplot")
+    )
+  )
+)
+
+shinyApp(ui = ui, server = server)
