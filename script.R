@@ -19,16 +19,16 @@ housing_df <- housing_df %>% filter(Type == "House and Land") %>%
                      Nova.Scotia, New.Brunswick, Quebec, Ontario, Manitoba,
                      Saskatchewan, Alberta, British.Columbia) %>% 
               group_by(year) %>% summarize(
-                Newfoundland.and.Labrador = mean(Newfoundland.and.Labrador, na.rm = TRUE),
-                Prince.Edward.Island = mean(Prince.Edward.Island, na.rm = TRUE),
-                Nova.Scotia = mean(Nova.Scotia, na.rm = TRUE),
-                New.Brunswick= mean(New.Brunswick, na.rm = TRUE),
-                Quebec = mean(Quebec, na.rm = TRUE),
-                Ontario = mean(Ontario, na.rm = TRUE),
-                Manitoba = mean(Manitoba, na.rm = TRUE),
-                Saskatchewan = mean(Saskatchewan, na.rm = TRUE),
-                Alberta = mean(Alberta, na.rm = TRUE),
-                British.Columbia = mean(British.Columbia, na.rm = TRUE)
+                Newfoundland.and.Labrador.HPI = mean(Newfoundland.and.Labrador, na.rm = TRUE),
+                Prince.Edward.Island.HPI = mean(Prince.Edward.Island, na.rm = TRUE),
+                Nova.Scotia.HPI = mean(Nova.Scotia, na.rm = TRUE),
+                New.Brunswick.HPI= mean(New.Brunswick, na.rm = TRUE),
+                Quebec.HPI = mean(Quebec, na.rm = TRUE),
+                Ontario.HPI = mean(Ontario, na.rm = TRUE),
+                Manitoba.HPI = mean(Manitoba, na.rm = TRUE),
+                Saskatchewan.HPI = mean(Saskatchewan, na.rm = TRUE),
+                Alberta.HPI = mean(Alberta, na.rm = TRUE),
+                British.Columbia.HPI = mean(British.Columbia, na.rm = TRUE)
               ) %>% ungroup() %>%  filter(year >= 1986)
 
 
@@ -38,8 +38,9 @@ employment_df <- employment_df %>% filter(Age.group=="15 years and over") %>%
                 group_by(year = substr(REF_DATE, 1, 4), Province) %>% summarize(
                   Employment.rate = mean(Employment.rate, na.rm = TRUE),
                   Unemployment.rate = mean(Unemployment.rate, na.rm = TRUE)
-                )  %>% ungroup() %>%  filter(year >= 1986) %>% 
+                )  %>% ungroup() %>%  filter(year >= 1986) %>% filter(Province != 'Canada') %>%
                 pivot_wider(names_from = "Province", values_from = c("Employment.rate", "Unemployment.rate"))
+                
 
 #Joining the two datasets
 employment_df$year <- as.numeric(employment_df$year) #changed employment_db year's type to integer from character
