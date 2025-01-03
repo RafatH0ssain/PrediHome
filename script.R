@@ -61,10 +61,12 @@ server <- function(input, output) {
     data <- filtered_data()
     
     # Find the province with the lowest HPI
-    lowest_hpi <- data %>% 
+    input_hpi_df <- data %>% 
       select(ends_with("HPI")) %>%
       summarise_all(min, na.rm = TRUE) %>%
-      pivot_longer(cols = everything(), names_to = "Province", values_to = "HPI") %>%
+      pivot_longer(cols = everything(), names_to = "Province", values_to = "HPI")
+    
+    lowest_hpi <- input_hpi_df %>%
       arrange(HPI) %>%
       slice(1)
     
@@ -74,18 +76,20 @@ server <- function(input, output) {
     
     # Plot the HPI bar chart
     output$hpi_barplot <- renderPlot({
-      ggplot(data, aes(x = reorder(Province, -HPI), y = HPI, fill = Province)) +
-        geom_bar(stat = "identity") +
-        theme_minimal() +
-        labs(x = "Province", y = "HPI", title = paste("HPI in", input$year)) +
-        coord_flip()
+      ggplot(input_hpi_df, aes(x = Province)) + 
+        geom_bar(aes(y = HPI, fill = HPI), stat = "identity") + 
+        labs(title = "HPI by Province", x = "Province", y = "HPI") +
+        scale_fill_gradient(low = "white", high = "black", name = "HPI")
     })
     
+    
     # Find the province with the lowest Unemployment rate
-    lowest_unemployment <- data %>% 
+    input_unemployment_df <- data %>% 
       select(starts_with("Unemployment.rate")) %>%
       summarise_all(min, na.rm = TRUE) %>%
-      pivot_longer(cols = everything(), names_to = "Province", values_to = "Unemployment.rate") %>%
+      pivot_longer(cols = everything(), names_to = "Province", values_to = "Unemployment.rate")
+    
+    lowest_unemployment <- input_unemployment_df %>%
       arrange(Unemployment.rate) %>%
       slice(1)
     
@@ -95,11 +99,10 @@ server <- function(input, output) {
     
     # Plot the Unemployment rate bar chart
     output$unemployment_barplot <- renderPlot({
-      ggplot(data, aes(x = reorder(Province, -Unemployment.rate), y = Unemployment.rate, fill = Province)) +
-        geom_bar(stat = "identity") +
-        theme_minimal() +
-        labs(x = "Province", y = "Unemployment Rate", title = paste("Unemployment Rate in", input$year)) +
-        coord_flip()
+      ggplot(input_unemployment_df, aes(x = Province)) + 
+        geom_bar(aes(y = Unemployment.rate, fill = Unemployment.rate), stat = "identity") + 
+        labs(title = "Unemployment rate by Province", x = "Province", y = "Unemployment rate") +
+        scale_fill_gradient(low = "white", high = "black", name = "Unemployment.rate")
     })
   })
 }
