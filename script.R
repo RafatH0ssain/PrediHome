@@ -39,7 +39,7 @@ employment_df <- employment_df %>% filter(Age.group=="15 years and over") %>%
                   Employment.rate = mean(Employment.rate, na.rm = TRUE),
                   Unemployment.rate = mean(Unemployment.rate, na.rm = TRUE)
                 )  %>% ungroup() %>%  filter(year >= 1986) %>% 
-                pivot_wider(names_from = "Province", values_from = "year")
+                pivot_wider(names_from = "Province", values_from = c("Employment.rate", "Unemployment.rate"))
 
 #Joining the two datasets
 employment_df$year <- as.numeric(employment_df$year) #changed employment_db year's type to integer from character
