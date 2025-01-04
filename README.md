@@ -77,13 +77,12 @@ The analysis is based on the following datasets from Kaggle:
 - **tidyr**: For tidying and reshaping the data.
 - **lm()**: For building regression models to predict future data.
 
-## How to Run the App
+## How to Run the App in RStudio
 
 1. Install the necessary R packages:
    ```r
    install.packages(c("shiny", "ggplot2", "dplyr", "tidyr"))
 
 2. Clone or download the repository.
-3. Install RStudio.
-4. Open the R script and run the app.
-5. Enter a year (1986-2035) to view the analysis and predictions.
+3. Open the R script and run the app.
+4. Enter a year (1986-2035) to view the analysis and predictions.
