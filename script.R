@@ -168,7 +168,6 @@ server <- function(input, output) {
   observeEvent(input$submit, {
     # Get the filtered data for the selected year
     data <- filtered_data()
-    View(data)
     
     # Find the province with the lowest HPI
     input_hpi_df <- data %>% 
@@ -212,7 +211,8 @@ server <- function(input, output) {
       ggplot(input_unemployment_df, aes(x = Province)) + 
         geom_bar(aes(y = Unemployment.rate, fill = Unemployment.rate), stat = "identity") + 
         labs(title = "Unemployment rate by Province", x = "Province", y = "Unemployment rate") +
-        scale_fill_gradient(low = "white", high = "black", name = "Unemployment.rate")
+        scale_fill_gradient(low = "white", high = "black", name = "Unemployment.rate") +
+        coord_flip()
     })
   })
 }
