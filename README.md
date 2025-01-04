@@ -1,6 +1,3 @@
-
-setwd()
-
 # PrediHome: Housing Price Index and Employment Rate Analytics
 
 **PrediHome** is an interactive web app built using **R** and **Shiny**, designed to help users make informed decisions about the best province to live in Canada. The app provides detailed analytics on **housing price data (HPI)**, **unemployment rate**, and **employment rate** data for the years **1986-2035**. Users can input a specific year and receive insights and predictions about the HPI and employment metrics across different provinces.
