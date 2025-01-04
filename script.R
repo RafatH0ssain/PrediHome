@@ -45,20 +45,39 @@ employment_df <- employment_df %>% filter(Age.group=="15 years and over") %>%
 employment_df$year <- as.numeric(employment_df$year) #changed employment_db year's type to integer from character
 merged_df <- inner_join(housing_df, employment_df, by = "year")
 
+# Train a regression model to predict HPI and Unemployment rate for each province (years 2023-2035)
+# Newfoundland and Labrador
+hpi_model <- lm(Newfoundland.and.Labrador.HPI ~ year, data = housing_df)
+unemployment_model <- lm(`Employment.rate_Newfoundland and Labrador` ~ year, data = employment_df)
+future_years <- data.frame(year = 2023:2035)
+future_hpi <- predict(hpi_model, newdata = future_years)
+future_unemployment <- predict(unemployment_model, newdata = future_years)
 
-View(merged_df)
+#Final dataframe with all predictions
+future_predictions <- data.frame(
+  year = 2023:2035,
+  Newfoundland.and.Labrador.HPI = future_hpi,
+  `Unemployment.rate_Newfoundland and Labrador` = future_unemployment
+)
 
 server <- function(input, output) {
   
   # Reactive expression to filter data for selected year
   filtered_data <- reactive({
-    year_data <- merged_df %>% filter(year == input$year)
+    # If the selected year is in the current data, use the existing data
+    if (input$year <= 2022) {
+      year_data <- merged_df %>% filter(year == input$year)
+    } else {
+      # Otherwise, use predicted data for future years
+      year_data <- future_predictions %>% filter(year == input$year)
+    }
     return(year_data)
   })
   
   observeEvent(input$submit, {
     # Get the filtered data for the selected year
     data <- filtered_data()
+    View(data)
     
     # Find the province with the lowest HPI
     input_hpi_df <- data %>% 
