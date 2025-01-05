@@ -52,12 +52,14 @@ The analysis is based on the following datasets from Kaggle:
 #### 1. **Bar Chart**: Housing Price Index (HPI) by Province
    - A bar chart showing **HPI** values for each province in the selected year.
    - Helps users visually compare housing prices and identify affordable or expensive provinces for that year.
+   - The bars have **continuous color coding** that reflects the HPI values.
 
    ![Bar Chart: Housing Price Index](plot-examples/lowest_hpi_2027.png)
 
 #### 2. **Bar Chart**: Unemployment Rates by Province
    - A bar chart displaying the **unemployment rate** for each province in the selected year.
    - Helps users analyze the economic climate in different provinces and make informed decisions about employment opportunities.
+   - The bars have **continuous color coding** that reflects the unemployment rates.
 
    ![Bar Chart: Unemployment Rates](plot-examples/lowest_unemployment_rate_2027.png)
 
