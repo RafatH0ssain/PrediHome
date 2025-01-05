@@ -50,7 +50,6 @@ employment_df <- employment_df %>% filter(Age.group=="15 years and over") %>%
 employment_df$year <- as.numeric(employment_df$year) #changed employment_db year's type to integer from character
 merged_df <- inner_join(housing_df, employment_df, by = "year")
 
-
 # Train a regression model to predict HPI and Unemployment rate for each province (years 2023-2035)
 
 # Newfoundland and Labrador
@@ -150,6 +149,14 @@ future_predictions <- data.frame(
 )
 
 
+# Create a function to calculate the composite score for each province
+calculate_score <- function(hpi, unemployment_rate, employment_rate, hpi_weight = 0.4, unem_rate_weight = 0.3, emp_rate_weight = 0.3) {
+  # Inverse HPI and Unemployment rate for the score, as lower values are better
+  score <- (hpi_weight * (1 / hpi)) + (unem_rate_weight * (1 / unemployment_rate)) + (emp_rate_weight * employment_rate)
+  return(score)
+}
+
+
 # Handle user input
 server <- function(input, output) {
   
@@ -168,6 +175,39 @@ server <- function(input, output) {
   observeEvent(input$submit, {
     # Get the filtered data for the selected year
     data <- filtered_data()
+    output$data <- renderText({
+      paste(colnames(data))
+    })
+    
+    #CHATGPT
+    # Calculate the composite score for each province
+    provinces <- colnames(data)
+    provinces_hpi <- grep("HPI", provinces, value = TRUE)
+    provinces_unemployment <- grep("Unemployment.rate", provinces, value = TRUE)
+    provinces_employment <- grep("Employment.rate", provinces, value = TRUE)
+    
+    scores <- sapply(provinces_hpi, function(province) {
+      hpi <- as.numeric(data[[province]])
+      
+      # Extract the province name by removing the "HPI" suffix
+      province_name <- sub("\\.HPI$", "", province)
+      
+      # Construct the correct column names for unemployment and employment rates
+      unemployment_rate <- as.numeric(data[[paste0("Unemployment.rate_", province_name)]])
+      employment_rate <- as.numeric(data[[paste0("Employment.rate_", province_name)]])
+      
+      # Calculate score for each province
+      calculate_score(hpi, unemployment_rate, employment_rate)
+    })
+    
+    
+    # Find the province with the highest score
+    best_province <- names(scores)[which.max(scores)]
+    
+    output$best_province <- renderText({
+      paste("The best province to live in for", input$year, "is", best_province)
+    })
+    #END
     
     # Find the province with the lowest HPI
     input_hpi_df <- data %>% 
@@ -230,6 +270,11 @@ ui <- fluidPage(
     ),
     
     mainPanel(
+      textOutput("data"),
+      
+      h3("Best Province"),
+      textOutput("best_province"),
+      
       h3("Province with Lowest HPI"),
       textOutput("lowest_hpi_province"),
       plotOutput("hpi_barplot"),
