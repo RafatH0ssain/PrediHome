@@ -71,6 +71,7 @@ The analysis is based on the following datasets from Kaggle:
   - The province with the **lowest HPI**.
   - The province with the **lowest unemployment rate**.
   - **Visualizations**: A bar chart showing the HPI values of all provinces and one showing unemployment rates for all provinces.
+  ![User Interface](webpage.jpeg)
 
 ## Tools Used
 
