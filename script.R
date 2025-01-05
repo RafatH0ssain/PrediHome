@@ -54,98 +54,127 @@ merged_df <- inner_join(housing_df, employment_df, by = "year")
 
 # Newfoundland and Labrador
 hpi_model_NaL <- lm(Newfoundland.and.Labrador.HPI ~ year, data = housing_df)
-unemployment_model_NaL <- lm(`Employment.rate_Newfoundland and Labrador` ~ year, data = employment_df)
+unemployment_model_NaL <- lm(`Unemployment.rate_Newfoundland and Labrador` ~ year, data = employment_df)
+employment_model_NaL <- lm(`Employment.rate_Newfoundland and Labrador` ~ year, data = employment_df)
 future_years_NaL <- data.frame(year = 2023:2035)
 future_hpi_NaL <- predict(hpi_model_NaL, newdata = future_years_NaL)
 future_unemployment_NaL <- predict(unemployment_model_NaL, newdata = future_years_NaL)
+future_employment_NaL <- predict(employment_model_NaL, newdata = future_years_NaL)
 
 # Alberta
 hpi_model_A <- lm(Alberta.HPI ~ year, data = housing_df)
-unemployment_model_A <- lm(`Employment.rate_Alberta` ~ year, data = employment_df)
+unemployment_model_A <- lm(`Unemployment.rate_Alberta` ~ year, data = employment_df)
+employment_model_A <- lm(`Employment.rate_Alberta` ~ year, data = employment_df)
 future_years_A <- data.frame(year = 2023:2035)
 future_hpi_A <- predict(hpi_model_A, newdata = future_years_A)
 future_unemployment_A <- predict(unemployment_model_A, newdata = future_years_A)
+future_employment_A <- predict(employment_model_A, newdata = future_years_A)
 
 # British Columbia
 hpi_model_BC <- lm(British.Columbia.HPI ~ year, data = housing_df)
-unemployment_model_BC <- lm(`Employment.rate_British Columbia` ~ year, data = employment_df)
+unemployment_model_BC <- lm(`Unemployment.rate_British Columbia` ~ year, data = employment_df)
+employment_model_BC <- lm(`Employment.rate_British Columbia` ~ year, data = employment_df)
 future_years_BC <- data.frame(year = 2023:2035)
 future_hpi_BC <- predict(hpi_model_BC, newdata = future_years_BC)
 future_unemployment_BC <- predict(unemployment_model_BC, newdata = future_years_BC)
+future_employment_BC <- predict(employment_model_BC, newdata = future_years_BC)
 
 # Manitoba
 hpi_model_M <- lm(Manitoba.HPI ~ year, data = housing_df)
-unemployment_model_M <- lm(`Employment.rate_Manitoba` ~ year, data = employment_df)
+unemployment_model_M <- lm(`Unemployment.rate_Manitoba` ~ year, data = employment_df)
+employment_model_M <- lm(`Employment.rate_Manitoba` ~ year, data = employment_df)
 future_years_M <- data.frame(year = 2023:2035)
 future_hpi_M <- predict(hpi_model_M, newdata = future_years_M)
 future_unemployment_M <- predict(unemployment_model_M, newdata = future_years_M)
+future_employment_M <- predict(employment_model_M, newdata = future_years_M)
 
 # New Brunswick
 hpi_model_NB <- lm(New.Brunswick.HPI ~ year, data = housing_df)
-unemployment_model_NB <- lm(`Employment.rate_New Brunswick` ~ year, data = employment_df)
+unemployment_model_NB <- lm(`Unemployment.rate_New Brunswick` ~ year, data = employment_df)
+employment_model_NB <- lm(`Employment.rate_New Brunswick` ~ year, data = employment_df)
 future_years_NB <- data.frame(year = 2023:2035)
 future_hpi_NB <- predict(hpi_model_NB, newdata = future_years_NB)
 future_unemployment_NB <- predict(unemployment_model_NB, newdata = future_years_NB)
+future_employment_NB <- predict(employment_model_NB, newdata = future_years_NB)
 
 # Nova Scotia
 hpi_model_NS <- lm(Nova.Scotia.HPI ~ year, data = housing_df)
-unemployment_model_NS <- lm(`Employment.rate_Nova Scotia` ~ year, data = employment_df)
+unemployment_model_NS <- lm(`Unemployment.rate_Nova Scotia` ~ year, data = employment_df)
+employment_model_NS <- lm(`Employment.rate_Nova Scotia` ~ year, data = employment_df)
 future_years_NS <- data.frame(year = 2023:2035)
 future_hpi_NS <- predict(hpi_model_NS, newdata = future_years_NS)
 future_unemployment_NS <- predict(unemployment_model_NS, newdata = future_years_NS)
+future_employment_NS <- predict(employment_model_NS, newdata = future_years_NB)
 
 # Ontario
 hpi_model_O <- lm(Ontario.HPI ~ year, data = housing_df)
-unemployment_model_O <- lm(`Employment.rate_Ontario` ~ year, data = employment_df)
+unemployment_model_O <- lm(`Unemployment.rate_Ontario` ~ year, data = employment_df)
+employment_model_O <- lm(`Employment.rate_Ontario` ~ year, data = employment_df)
 future_years_O <- data.frame(year = 2023:2035)
 future_hpi_O <- predict(hpi_model_O, newdata = future_years_O)
 future_unemployment_O <- predict(unemployment_model_O, newdata = future_years_O)
+future_employment_O <- predict(employment_model_O, newdata = future_years_O)
 
 # Prince Edward Island
 hpi_model_PEI <- lm(Prince.Edward.Island.HPI ~ year, data = housing_df)
-unemployment_model_PEI <- lm(`Employment.rate_Prince Edward Island` ~ year, data = employment_df)
+unemployment_model_PEI <- lm(`Unemployment.rate_Prince Edward Island` ~ year, data = employment_df)
+employment_model_PEI <- lm(`Employment.rate_Prince Edward Island` ~ year, data = employment_df)
 future_years_PEI <- data.frame(year = 2023:2035)
 future_hpi_PEI <- predict(hpi_model_PEI, newdata = future_years_PEI)
 future_unemployment_PEI <- predict(unemployment_model_PEI, newdata = future_years_PEI)
+future_employment_PEI <- predict(employment_model_PEI, newdata = future_years_O)
 
 # Quebec
 hpi_model_Q <- lm(Quebec.HPI ~ year, data = housing_df)
-unemployment_model_Q <- lm(`Employment.rate_Quebec` ~ year, data = employment_df)
+unemployment_model_Q <- lm(`Unemployment.rate_Quebec` ~ year, data = employment_df)
+employment_model_Q <- lm(`Employment.rate_Quebec` ~ year, data = employment_df)
 future_years_Q <- data.frame(year = 2023:2035)
 future_hpi_Q <- predict(hpi_model_Q, newdata = future_years_Q)
 future_unemployment_Q <- predict(unemployment_model_Q, newdata = future_years_Q)
+future_employment_Q <- predict(employment_model_Q, newdata = future_years_Q)
 
 # Saskatchewan
 hpi_model_S <- lm(Saskatchewan.HPI ~ year, data = housing_df)
-unemployment_model_S <- lm(`Employment.rate_Saskatchewan` ~ year, data = employment_df)
+unemployment_model_S <- lm(`Unemployment.rate_Saskatchewan` ~ year, data = employment_df)
+employment_model_S <- lm(`Employment.rate_Saskatchewan` ~ year, data = employment_df)
 future_years_S <- data.frame(year = 2023:2035)
 future_hpi_S <- predict(hpi_model_S, newdata = future_years_S)
 future_unemployment_S <- predict(unemployment_model_S, newdata = future_years_S)
-
+future_employment_S <- predict(employment_model_S, newdata = future_years_S)
 
 # Final dataframe with all predictions
 future_predictions <- data.frame(
   year = 2023:2035,
   Newfoundland.and.Labrador.HPI = future_hpi_NaL,
   `Unemployment.rate_Newfoundland and Labrador` = future_unemployment_NaL,
+  `Employment.rate_Newfoundland and Labrador` = future_employment_NaL,
   Alberta.HPI = future_hpi_A,
   `Unemployment.rate_Alberta` = future_unemployment_A,
+  `Employment.rate_Alberta` = future_employment_A,
   British.Columbia.HPI = future_hpi_BC,
   `Unemployment.rate_British` = future_unemployment_BC,
+  `Employment.rate_British` = future_employment_BC,
   Manitoba.HPI = future_hpi_M,
   `Unemployment.rate_Manitoba` = future_unemployment_M,
+  `Employment.rate_Manitoba` = future_employment_M,
   New.Brunswick.HPI = future_hpi_NB,
   `Unemployment.rate_New Brunswick` = future_unemployment_NB,
+  `Employment.rate_New Brunswick` = future_employment_NB,
   Nova.Scotia.HPI = future_hpi_NS,
   `Unemployment.rate_Nova Scotia` = future_unemployment_NS,
+  `Employment.rate_Nova Scotia` = future_employment_NS,
   Ontario.HPI = future_hpi_O,
   `Unemployment.rate_Ontario` = future_unemployment_O,
+  `Employment.rate_Ontario` = future_employment_O,
   Prince.Edward.Island.HPI = future_hpi_PEI,
   `Unemployment.rate_Prince Edward Island` = future_unemployment_PEI,
+  `Employment.rate_Prince Edward Island` = future_employment_PEI,
   Quebec.HPI = future_hpi_Q,
   `Unemployment.rate_Quebec` = future_unemployment_Q,
+  `Employment.rate_Quebec` = future_employment_Q,
   Saskatchewan.HPI = future_hpi_S,
-  `Unemployment.rate_Saskatchewan`= future_unemployment_S
+  `Unemployment.rate_Saskatchewan`= future_unemployment_S,
+  `Employment.rate_Saskatchewan` = future_employment_S
 )
 
 
@@ -175,9 +204,6 @@ server <- function(input, output) {
   observeEvent(input$submit, {
     # Get the filtered data for the selected year
     data <- filtered_data()
-    output$data <- renderText({
-      paste(colnames(data))
-    })
     
     #CHATGPT
     # Calculate the composite score for each province
