@@ -229,7 +229,7 @@ server <- function(input, output) {
     
     
     # Find the province with the highest score
-    best_province <- names(scores)[which.max(scores)]
+    best_province <- sub("\\.HPI$", "", names(scores)[which.max(scores)])
     
     output$best_province <- renderText({
       paste("The best province to live in for the year", input$year, "is", best_province)
@@ -240,7 +240,8 @@ server <- function(input, output) {
     input_hpi_df <- data %>% 
       select(ends_with("HPI")) %>%
       summarise_all(min, na.rm = TRUE) %>%
-      pivot_longer(cols = everything(), names_to = "Province", values_to = "HPI")
+      pivot_longer(cols = everything(), names_to = "Province", values_to = "HPI") %>%
+      mutate(Province = sub("\\.HPI$", "", Province))  # Remove .HPI suffix
     
     lowest_hpi <- input_hpi_df %>%
       arrange(HPI) %>%
@@ -261,19 +262,24 @@ server <- function(input, output) {
           plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
           axis.title.x = element_text(size = 20, color = "black"),                   # X-axis title
           axis.title.y = element_text(size = 20, color = "black"),                   # Y-axis title
-          axis.text.x = element_text(size = 16, color = "black"),                                      # X-axis tick labels
-          axis.text.y = element_text(size = 16, color = "black"),                                      # Y-axis tick labels
-          legend.title = element_text(size = 18),                                                      # Legend title
-          legend.text = element_text(size = 16)                                                        # Legend text
+          axis.text.x = element_text(size = 16, color = "black", angle = 45, hjust = 1),  # Slant X-axis labels
+          axis.text.y = element_text(size = 16, color = "black"),                   # Y-axis tick labels
+          legend.title = element_text(size = 18),                                     # Legend title
+          legend.text = element_text(size = 16)                                      # Legend text
         )
     })
+    
+    # Clean the Province names (replace dots with spaces)
+    input_hpi_df <- input_hpi_df %>%
+      mutate(Province = gsub("\\.", " ", Province))  # Replace dot with space
     
     
     # Find the province with the lowest Unemployment rate
     input_unemployment_df <- data %>% 
       select(starts_with("Unemployment.rate")) %>%
       summarise_all(min, na.rm = TRUE) %>%
-      pivot_longer(cols = everything(), names_to = "Province", values_to = "Unemployment.rate")
+      pivot_longer(cols = everything(), names_to = "Province", values_to = "Unemployment.rate") %>%
+      mutate(Province = sub("^Unemployment\\.rate_", "", Province))  # Remove Unemployment.rate_ prefix
     
     lowest_unemployment <- input_unemployment_df %>%
       arrange(Unemployment.rate) %>%
@@ -282,6 +288,7 @@ server <- function(input, output) {
     output$lowest_unemployment_province <- renderText({
       paste("The province with the lowest Unemployment rate in", input$year, "is", lowest_unemployment$Province)
     })
+    
     
     # Plot the Unemployment rate bar chart
     output$unemployment_barplot <- renderPlot({
