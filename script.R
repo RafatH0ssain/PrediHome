@@ -258,9 +258,9 @@ server <- function(input, output) {
         labs(title = "HPI by Province", x = "Province", y = "HPI") +
         scale_fill_gradient(low = "darkolivegreen2", high = "coral2", name = "HPI") +
         theme(
-          plot.title = element_text(family = "Roboto", face = "bold", size = 24, color = "darkgrey"),   # Title
-          axis.title.x = element_text(family = "Roboto", size = 20, color = "black"),                   # X-axis title
-          axis.title.y = element_text(family = "Roboto", size = 20, color = "black"),                   # Y-axis title
+          plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
+          axis.title.x = element_text(size = 20, color = "black"),                   # X-axis title
+          axis.title.y = element_text(size = 20, color = "black"),                   # Y-axis title
           axis.text.x = element_text(size = 16, color = "black"),                                      # X-axis tick labels
           axis.text.y = element_text(size = 16, color = "black"),                                      # Y-axis tick labels
           legend.title = element_text(size = 18),                                                      # Legend title
@@ -291,9 +291,9 @@ server <- function(input, output) {
         scale_fill_gradient(low = "skyblue", high = "brown1", name = "Unemployment.rate") +
         coord_flip() +
         theme(
-          plot.title = element_text(family = "Roboto", face = "bold", size = 24, color = "darkgrey"),   # Title
-          axis.title.x = element_text(family = "Roboto", size = 20, color = "black"),                   # X-axis title
-          axis.title.y = element_text(family = "Roboto", size = 20, color = "black"),                   # Y-axis title
+          plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
+          axis.title.x = element_text(size = 20, color = "black"),                   # X-axis title
+          axis.title.y = element_text(size = 20, color = "black"),                   # Y-axis title
           axis.text.x = element_text(size = 16, color = "black"),                                      # X-axis tick labels
           axis.text.y = element_text(size = 16, color = "black"),                                      # Y-axis tick labels
           legend.title = element_text(size = 18),                                                      # Legend title
