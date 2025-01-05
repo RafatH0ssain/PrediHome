@@ -227,7 +227,7 @@ server <- function(input, output) {
     })
     
     
-    if (input$year < 1985 && input$input > 2035) {
+    if (input$year > 1985 && input$input < 2035) {
       # Find the province with the highest score
       best_province <- sub("\\.HPI$", "", names(scores)[which.max(scores)])
       
