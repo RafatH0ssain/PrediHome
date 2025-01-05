@@ -263,7 +263,7 @@ server <- function(input, output) {
       ggplot(input_hpi_df, aes(x = Province)) + 
         geom_bar(aes(y = HPI, fill = HPI), stat = "identity") + 
         labs(title = "HPI by Province", x = "Province", y = "HPI") +
-        scale_fill_gradient(low = "darkolivegreen2", high = "coral2", name = "HPI") +
+        scale_fill_gradient(low = "azure3", high = "forestgreen", name = "HPI") +
         theme(
           plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
           axis.title.x = element_text(size = 20, color = "black"),                   # X-axis title
@@ -302,7 +302,7 @@ server <- function(input, output) {
       ggplot(input_unemployment_df, aes(x = Province)) + 
         geom_bar(aes(y = Unemployment.rate, fill = Unemployment.rate), stat = "identity") + 
         labs(title = "Unemployment rate by Province", x = "Province", y = "Unemployment rate") +
-        scale_fill_gradient(low = "skyblue", high = "brown1", name = "Unemployment rate") +
+        scale_fill_gradient(low = "azure3", high = "brown2", name = "Unemployment rate") +
         coord_flip() +
         theme(
           plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
@@ -333,10 +333,11 @@ ui <- fluidPage(
       tags$div(
         wellPanel(
           # Input: Select Year
-          numericInput("year", "Select Year:", value = 2000, min = 1986, max = 2022),
+          numericInput("year", "Select Year:", value = 2000, min = 1986, max = 2035),
           actionButton("submit", "Submit")
         ), class = "form"
       ),
+
       
       mainPanel(
         tags$div(
