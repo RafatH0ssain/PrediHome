@@ -200,18 +200,15 @@ server <- function(input, output) {
     }
     return(year_data)
   })
-  
   observeEvent(input$submit, {
     # Get the filtered data for the selected year
     data <- filtered_data()
-    
     
     # Calculate the composite score for each province
     provinces <- colnames(data)
     provinces_hpi <- grep("HPI", provinces, value = TRUE)
     provinces_unemployment <- grep("Unemployment.rate", provinces, value = TRUE)
     provinces_employment <- grep("Employment.rate", provinces, value = TRUE)
-    
     
     scores <- sapply(provinces_hpi, function(province) {
       hpi <- as.numeric(data[[province]])
@@ -227,15 +224,16 @@ server <- function(input, output) {
       calculate_score(hpi, unemployment_rate, employment_rate)
     })
     
-    
     # Find the province with the highest score
     best_province <- sub("\\.HPI$", "", names(scores)[which.max(scores)])
     
     output$best_province <- renderText({
-      paste("The best province to live in for the year", input$year, "is", best_province)
-    })
-    
-    
+      paste(
+        "The best province to live in for the year", input$year, "is", best_province, ".", 
+        "This conclusion is based on a composite score that considers key economic indicators like the Housing Price Index (HPI), Unemployment Rate, and Employment Rate. The province with the highest score provides the best balance of affordable housing and job opportunities, ensuring a higher quality of life for residents."
+      )
+  })
+  
     # Find the province with the lowest HPI
     input_hpi_df <- data %>% 
       select(ends_with("HPI")) %>%
