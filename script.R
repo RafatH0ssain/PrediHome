@@ -205,12 +205,13 @@ server <- function(input, output) {
     # Get the filtered data for the selected year
     data <- filtered_data()
     
-    #CHATGPT
+    
     # Calculate the composite score for each province
     provinces <- colnames(data)
     provinces_hpi <- grep("HPI", provinces, value = TRUE)
     provinces_unemployment <- grep("Unemployment.rate", provinces, value = TRUE)
     provinces_employment <- grep("Employment.rate", provinces, value = TRUE)
+    
     
     scores <- sapply(provinces_hpi, function(province) {
       hpi <- as.numeric(data[[province]])
@@ -231,9 +232,9 @@ server <- function(input, output) {
     best_province <- names(scores)[which.max(scores)]
     
     output$best_province <- renderText({
-      paste("The best province to live in for", input$year, "is", best_province)
+      paste("The best province to live in for the year", input$year, "is", best_province)
     })
-    #END
+    
     
     # Find the province with the lowest HPI
     input_hpi_df <- data %>% 
@@ -249,12 +250,22 @@ server <- function(input, output) {
       paste("The province with the lowest HPI in", input$year, "is", lowest_hpi$Province)
     })
     
+    
     # Plot the HPI bar chart
     output$hpi_barplot <- renderPlot({
       ggplot(input_hpi_df, aes(x = Province)) + 
         geom_bar(aes(y = HPI, fill = HPI), stat = "identity") + 
         labs(title = "HPI by Province", x = "Province", y = "HPI") +
-        scale_fill_gradient(low = "white", high = "black", name = "HPI")
+        scale_fill_gradient(low = "darkolivegreen2", high = "coral2", name = "HPI") +
+        theme(
+          plot.title = element_text(family = "Roboto", face = "bold", size = 24, color = "darkgrey"),   # Title
+          axis.title.x = element_text(family = "Roboto", size = 20, color = "black"),                   # X-axis title
+          axis.title.y = element_text(family = "Roboto", size = 20, color = "black"),                   # Y-axis title
+          axis.text.x = element_text(size = 16, color = "black"),                                      # X-axis tick labels
+          axis.text.y = element_text(size = 16, color = "black"),                                      # Y-axis tick labels
+          legend.title = element_text(size = 18),                                                      # Legend title
+          legend.text = element_text(size = 16)                                                        # Legend text
+        )
     })
     
     
@@ -277,8 +288,17 @@ server <- function(input, output) {
       ggplot(input_unemployment_df, aes(x = Province)) + 
         geom_bar(aes(y = Unemployment.rate, fill = Unemployment.rate), stat = "identity") + 
         labs(title = "Unemployment rate by Province", x = "Province", y = "Unemployment rate") +
-        scale_fill_gradient(low = "white", high = "black", name = "Unemployment.rate") +
-        coord_flip()
+        scale_fill_gradient(low = "skyblue", high = "brown1", name = "Unemployment.rate") +
+        coord_flip() +
+        theme(
+          plot.title = element_text(family = "Roboto", face = "bold", size = 24, color = "darkgrey"),   # Title
+          axis.title.x = element_text(family = "Roboto", size = 20, color = "black"),                   # X-axis title
+          axis.title.y = element_text(family = "Roboto", size = 20, color = "black"),                   # Y-axis title
+          axis.text.x = element_text(size = 16, color = "black"),                                      # X-axis tick labels
+          axis.text.y = element_text(size = 16, color = "black"),                                      # Y-axis tick labels
+          legend.title = element_text(size = 18),                                                      # Legend title
+          legend.text = element_text(size = 16)                                                        # Legend text
+        )
     })
   })
 }
@@ -286,29 +306,55 @@ server <- function(input, output) {
 
 # Show output in UI
 ui <- fluidPage(
-  titlePanel("PrediHome: Province Prediction"),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "scripts.css")
+  ),
   
-  sidebarLayout(
-    sidebarPanel(
-      # Input: Select Year
-      numericInput("year", "Select Year:", value = 2000, min = 1986, max = 2022),
-      actionButton("submit", "Submit")
+  tags$body(
+    tags$div(
+      tags$h1("PrediHome: Province Prediction", class = "title"), class = "h1div"
     ),
     
-    mainPanel(
-      textOutput("data"),
+    sidebarLayout(
+      tags$div(
+        wellPanel(
+          # Input: Select Year
+          numericInput("year", "Select Year:", value = 2000, min = 1986, max = 2022),
+          actionButton("submit", "Submit")
+        ), class = "form"
+      ),
       
-      h3("Best Province"),
-      textOutput("best_province"),
-      
-      h3("Province with Lowest HPI"),
-      textOutput("lowest_hpi_province"),
-      plotOutput("hpi_barplot"),
-      
-      h3("Province with Lowest Unemployment Rate"),
-      textOutput("lowest_unemployment_province"),
-      plotOutput("unemployment_barplot")
-    )
+      mainPanel(
+        tags$div(
+          
+          tags$div(
+            
+            tags$div(
+              h3("Best Province"),
+              textOutput("best_province"),
+              class = "plot-card"
+            ),
+            
+            tags$div(
+              h3("Province with Lowest HPI"),
+              textOutput("lowest_hpi_province"),
+              plotOutput("hpi_barplot"),
+              class = "plot-card"
+            ),
+            
+            tags$div(
+              h3("Province with Lowest Unemployment Rate"),
+              textOutput("lowest_unemployment_province"),
+              plotOutput("unemployment_barplot"),
+              class = "plot-card"
+            ),
+            
+            class = "plot-cards-container")
+        ), class = "main-panel"
+      )
+    ),
+    
+    class = "body roboto-medium"
   )
 )
 
