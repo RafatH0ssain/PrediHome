@@ -23,6 +23,12 @@ The primary goal of **PrediHome** is to help users evaluate potential provinces 
 
 4. **Regression Model Predictions (for years 2023-2035)**:
    - Uses linear regression models to predict future **HPI** and **unemployment rates** based on historical data.
+   
+5. **Identifies the best province to live in**:
+- Calculates a composite score for each province, where a higher score indicates a better province to live in. This is done based on the following metrics:
+  - Housing Price Index (HPI)
+  - Unemployment Rate
+  - Employment Rate
 
 ## Datasets
 
@@ -57,10 +63,11 @@ The analysis is based on the following datasets from Kaggle:
 
 ## User Interface
 
-**PrediHome** features an easy-to-navigate interface that includes:
+**PrediHome** features a modern, easy-to-navigate user interface that includes:
 
 - **Numeric Input**: Users can select a year between **1986** and **2035**.
 - **Submit Button**: After selecting the year, users can click the submit button to receive:
+  - The overall **best province** to live in.
   - The province with the **lowest HPI**.
   - The province with the **lowest unemployment rate**.
   - **Visualizations**: A bar chart showing the HPI values of all provinces and a line graph showing unemployment and employment rates for all provinces.
