@@ -227,15 +227,22 @@ server <- function(input, output) {
     })
     
     
-    # Find the province with the highest score
-    best_province <- sub("\\.HPI$", "", names(scores)[which.max(scores)])
-    
-    output$best_province <- renderText({
-      paste(
-        "The best province to live in for the year", input$year, "is", best_province, ".", 
-        "This conclusion is based on a composite score that considers key economic indicators like the Housing Price Index (HPI), Unemployment Rate, and Employment Rate. The province with the highest score provides the best balance of affordable housing and job opportunities, ensuring a higher quality of life for residents."
-      )
-  })
+    if (input$year < 1985 && input$input > 2035) {
+      # Find the province with the highest score
+      best_province <- sub("\\.HPI$", "", names(scores)[which.max(scores)])
+      
+      output$best_province <- renderText({
+        paste(
+          "The best province to live in for the year", input$year, "is", best_province, ".", 
+          "This conclusion is based on a composite score that considers key economic indicators like the Housing Price Index (HPI), Unemployment Rate, and Employment Rate. The province with the highest score provides the best balance of affordable housing and job opportunities, ensuring a higher quality of life for residents."
+        )
+      })
+    }
+    else {
+      output$best_province <- renderText({
+        paste("Error generating plot.\nPlease provide a year from 1986 to 2035.")
+      })
+    }
   
     # Find the province with the lowest HPI
     input_hpi_df <- data %>% 
@@ -253,27 +260,41 @@ server <- function(input, output) {
       arrange(HPI) %>%
       slice(1)
     
-    output$lowest_hpi_province <- renderText({
-      paste("The province with the lowest HPI in", input$year, "is", lowest_hpi$Province)
-    })
     
-    
-    # Plot the HPI bar chart
-    output$hpi_barplot <- renderPlot({
-      ggplot(input_hpi_df, aes(x = Province)) + 
-        geom_bar(aes(y = HPI, fill = HPI), stat = "identity") + 
-        labs(title = "HPI by Province", x = "Province", y = "HPI") +
-        scale_fill_gradient(low = "azure3", high = "forestgreen", name = "HPI") +
-        theme(
-          plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
-          axis.title.x = element_text(size = 20, color = "black"),                   # X-axis title
-          axis.title.y = element_text(size = 20, color = "black"),                   # Y-axis title
-          axis.text.x = element_text(size = 16, color = "black", angle = 45, hjust = 1),  # Slant X-axis labels
-          axis.text.y = element_text(size = 16, color = "black"),                   # Y-axis tick labels
-          legend.title = element_text(size = 18),                                     # Legend title
-          legend.text = element_text(size = 16)                                      # Legend text
-        )
-    })
+    if (input$year < 2036 && input$year > 1985) {
+      
+      output$lowest_hpi_province <- renderText({
+        paste("The province with the lowest HPI in", input$year, "is", lowest_hpi$Province)
+      })
+      
+      # Plot the HPI bar chart
+      output$hpi_barplot <- renderPlot({
+        ggplot(input_hpi_df, aes(x = Province)) + 
+          geom_bar(aes(y = HPI, fill = HPI), stat = "identity") + 
+          labs(title = "HPI by Province", x = "Province", y = "HPI") +
+          scale_fill_gradient(low = "azure3", high = "forestgreen", name = "HPI") +
+          theme(
+            plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
+            axis.title.x = element_text(size = 20, color = "black"),                   # X-axis title
+            axis.title.y = element_text(size = 20, color = "black"),                   # Y-axis title
+            axis.text.x = element_text(size = 16, color = "black", angle = 45, hjust = 1),  # Slant X-axis labels
+            axis.text.y = element_text(size = 16, color = "black"),                   # Y-axis tick labels
+            legend.title = element_text(size = 18),                                     # Legend title
+            legend.text = element_text(size = 16)                                      # Legend text
+          )
+      })
+    }
+    else {
+      # Plot the error message when no data exists
+      output$hpi_barplot <- renderPlot({
+        # Show a message indicating that the data is missing
+        ggplot() + 
+          geom_text(aes(x = 1, y = 1, label = "Error generating plot.\nPlease provide a year from 1986 to 2035."),
+                    size = 6, color = "red", hjust = 0.5, vjust = 0.5) +
+          theme_void() +  # Removes axes and gridlines
+          theme(plot.margin = margin(50, 50, 50, 50))  # Adds space for the message
+      })
+    }
     
     
     # Find the province with the lowest Unemployment rate
@@ -292,28 +313,42 @@ server <- function(input, output) {
       arrange(Unemployment.rate) %>%
       slice(1)
     
-    output$lowest_unemployment_province <- renderText({
-      paste("The province with the lowest Unemployment rate in", input$year, "is", lowest_unemployment$Province)
-    })
     
-    
-    # Plot the Unemployment rate bar chart
-    output$unemployment_barplot <- renderPlot({
-      ggplot(input_unemployment_df, aes(x = Province)) + 
-        geom_bar(aes(y = Unemployment.rate, fill = Unemployment.rate), stat = "identity") + 
-        labs(title = "Unemployment rate by Province", x = "Province", y = "Unemployment rate") +
-        scale_fill_gradient(low = "azure3", high = "brown2", name = "Unemployment rate") +
-        coord_flip() +
-        theme(
-          plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
-          axis.title.x = element_text(size = 20, color = "black"),                   # X-axis title
-          axis.title.y = element_text(size = 20, color = "black"),                   # Y-axis title
-          axis.text.x = element_text(size = 16, color = "black"),                                      # X-axis tick labels
-          axis.text.y = element_text(size = 16, color = "black"),                                      # Y-axis tick labels
-          legend.title = element_text(size = 18),                                                      # Legend title
-          legend.text = element_text(size = 16)                                                        # Legend text
-        )
-    })
+    if(input$year > 1985 && input$year < 2036) {
+      
+      output$lowest_unemployment_province <- renderText({
+        paste("The province with the lowest Unemployment rate in", input$year, "is", lowest_unemployment$Province)
+      })
+      
+      # Plot the Unemployment rate bar chart
+      output$unemployment_barplot <- renderPlot({
+        ggplot(input_unemployment_df, aes(x = Province)) + 
+          geom_bar(aes(y = Unemployment.rate, fill = Unemployment.rate), stat = "identity") + 
+          labs(title = "Unemployment rate by Province", x = "Province", y = "Unemployment rate") +
+          scale_fill_gradient(low = "azure3", high = "brown2", name = "Unemployment rate") +
+          coord_flip() +
+          theme(
+            plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
+            axis.title.x = element_text(size = 20, color = "black"),                   # X-axis title
+            axis.title.y = element_text(size = 20, color = "black"),                   # Y-axis title
+            axis.text.x = element_text(size = 16, color = "black"),                                      # X-axis tick labels
+            axis.text.y = element_text(size = 16, color = "black"),                                      # Y-axis tick labels
+            legend.title = element_text(size = 18),                                                      # Legend title
+            legend.text = element_text(size = 16)                                                        # Legend text
+          )
+      })
+    }
+    else {
+      # Plot the error message when no data exists
+      output$unemployment_barplot <- renderPlot({
+        # Show a message indicating that the data is missing
+        ggplot() + 
+          geom_text(aes(x = 1, y = 1, label = "Error generating plot.\nPlease provide a year from 1986 to 2035."),
+                    size = 6, color = "red", hjust = 0.5, vjust = 0.5) +
+          theme_void() +  # Removes axes and gridlines
+          theme(plot.margin = margin(50, 50, 50, 50))  # Adds space for the message
+      })
+    }
   })
 }
 
