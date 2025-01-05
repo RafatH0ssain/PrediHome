@@ -73,7 +73,7 @@ The analysis is based on the following datasets from Kaggle:
   - **Visualizations**: A bar chart showing the HPI values of all provinces and one showing unemployment rates for all provinces.
   ![User Interface](webpage.jpeg)
 
-## Tools Used
+## Tech stack
 
 - **R**: For data cleaning, manipulation, and analysis.
 - **Shiny**: For building the interactive web application.
@@ -92,3 +92,12 @@ The analysis is based on the following datasets from Kaggle:
 3. Open the R script and run the app.
 4. Enter a year (1986-2035) to view the analysis and predictions.
 - **Note**: If you see an error that says "*cannot open file '<filename>': No such file or directory*", run `setwd("<path_to_working_directory>")` in your terminal, replacing <path_to_working_directory> with the path to the directory containing the files you cloned.
+
+## Authors
+
+1. - Name: Nafisah Nubah
+   - Email: nafisahnubah@gmail.com
+   
+2. - Name: Muhammad Rafat Hossain
+   - Email: rafat.click.hossain@gmail.com
+
