@@ -19,7 +19,7 @@ The primary goal of **PrediHome** is to help users evaluate potential provinces 
    
 3. **Visualizations**:
    - **Bar Chart**: Displays the **HPI** values for each province in the selected year.
-   - **Line Graph**: Shows the **unemployment rate** and **employment rate** for all provinces in the selected year.
+   - **Bar Chart**: Shows the **unemployment rate** for each province in the selected year.
 
 4. **Regression Model Predictions (for years 2023-2035)**:
    - Uses linear regression models to predict future **HPI** and **unemployment rates** based on historical data.
@@ -53,13 +53,13 @@ The analysis is based on the following datasets from Kaggle:
    - A bar chart showing **HPI** values for each province in the selected year.
    - Helps users visually compare housing prices and identify affordable or expensive provinces for that year.
 
-   ![Bar Chart: Housing Price Index](plots/hpi-bar-chart.png)
+   ![Bar Chart: Housing Price Index](plot-examples/lowest_hpi_2027.png)
 
-#### 2. **Line Graph**: Unemployment and Employment Rates by Province
-   - A line graph displaying **unemployment rate** and **employment rate** for all provinces in the selected year.
+#### 2. **Bar Chart**: Unemployment Rates by Province
+   - A bar chart displaying the **unemployment rate** for each province in the selected year.
    - Helps users analyze the economic climate in different provinces and make informed decisions about employment opportunities.
 
-   ![Line Graph: Employment and Unemployment Rates](plots/line-graph-unemployment-employment.png)
+   ![Bar Chart: Unemployment Rates](plot-examples/lowest_unemployment_rate_2027.png)
 
 ## User Interface
 
@@ -70,13 +70,13 @@ The analysis is based on the following datasets from Kaggle:
   - The overall **best province** to live in.
   - The province with the **lowest HPI**.
   - The province with the **lowest unemployment rate**.
-  - **Visualizations**: A bar chart showing the HPI values of all provinces and a line graph showing unemployment and employment rates for all provinces.
+  - **Visualizations**: A bar chart showing the HPI values of all provinces and one showing unemployment rates for all provinces.
 
 ## Tools Used
 
 - **R**: For data cleaning, manipulation, and analysis.
 - **Shiny**: For building the interactive web application.
-- **ggplot2**: For creating visualizations like bar charts and line graphs.
+- **ggplot2**: For creating visualizations like bar charts.
 - **dplyr**: For data manipulation and aggregation.
 - **tidyr**: For tidying and reshaping the data.
 - **lm()**: For building regression models to predict future data.
