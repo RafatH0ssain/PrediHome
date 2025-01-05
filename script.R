@@ -1,5 +1,4 @@
-# PrediHome
-
+# Import required libraries
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -49,6 +48,7 @@ employment_df <- employment_df %>% filter(Age.group=="15 years and over") %>%
 # Joining the two datasets
 employment_df$year <- as.numeric(employment_df$year) #changed employment_db year's type to integer from character
 merged_df <- inner_join(housing_df, employment_df, by = "year")
+
 
 # Train a regression model to predict HPI and Unemployment rate for each province (years 2023-2035)
 
@@ -142,6 +142,7 @@ future_hpi_S <- predict(hpi_model_S, newdata = future_years_S)
 future_unemployment_S <- predict(unemployment_model_S, newdata = future_years_S)
 future_employment_S <- predict(employment_model_S, newdata = future_years_S)
 
+
 # Final dataframe with all predictions
 future_predictions <- data.frame(
   year = 2023:2035,
@@ -152,8 +153,8 @@ future_predictions <- data.frame(
   `Unemployment.rate_Alberta` = future_unemployment_A,
   `Employment.rate_Alberta` = future_employment_A,
   British.Columbia.HPI = future_hpi_BC,
-  `Unemployment.rate_British` = future_unemployment_BC,
-  `Employment.rate_British` = future_employment_BC,
+  `Unemployment.rate_British Columbia` = future_unemployment_BC,
+  `Employment.rate_British Columbia` = future_employment_BC,
   Manitoba.HPI = future_hpi_M,
   `Unemployment.rate_Manitoba` = future_unemployment_M,
   `Employment.rate_Manitoba` = future_employment_M,
@@ -179,9 +180,9 @@ future_predictions <- data.frame(
 
 
 # Create a function to calculate the composite score for each province
-calculate_score <- function(hpi, unemployment_rate, employment_rate, hpi_weight = 0.4, unem_rate_weight = 0.3, emp_rate_weight = 0.3) {
+calculate_score <- function(hpi, unemployment_rate, employment_rate, hpi_weight = 0.5, unem_rate_weight = 0.3, emp_rate_weight = 0.2) {
   # Inverse HPI and Unemployment rate for the score, as lower values are better
-  score <- (hpi_weight * (1 / hpi)) + (unem_rate_weight * (1 / unemployment_rate)) + (emp_rate_weight * employment_rate)
+  score <- (hpi_weight * (100 / hpi)) + (unem_rate_weight * (1 / unemployment_rate)) + (emp_rate_weight * employment_rate/10)
   return(score)
 }
 
@@ -210,6 +211,7 @@ server <- function(input, output) {
     provinces_unemployment <- grep("Unemployment.rate", provinces, value = TRUE)
     provinces_employment <- grep("Employment.rate", provinces, value = TRUE)
     
+    
     scores <- sapply(provinces_hpi, function(province) {
       hpi <- as.numeric(data[[province]])
       
@@ -223,6 +225,7 @@ server <- function(input, output) {
       # Calculate score for each province
       calculate_score(hpi, unemployment_rate, employment_rate)
     })
+    
     
     # Find the province with the highest score
     best_province <- sub("\\.HPI$", "", names(scores)[which.max(scores)])
@@ -240,6 +243,11 @@ server <- function(input, output) {
       summarise_all(min, na.rm = TRUE) %>%
       pivot_longer(cols = everything(), names_to = "Province", values_to = "HPI") %>%
       mutate(Province = sub("\\.HPI$", "", Province))  # Remove .HPI suffix
+    
+    
+    # Clean the Province names (replace dots with spaces)
+    input_hpi_df <- input_hpi_df %>%
+      mutate(Province = gsub("\\.", " ", Province))  # Replace dot with space
     
     lowest_hpi <- input_hpi_df %>%
       arrange(HPI) %>%
@@ -267,10 +275,6 @@ server <- function(input, output) {
         )
     })
     
-    # Clean the Province names (replace dots with spaces)
-    input_hpi_df <- input_hpi_df %>%
-      mutate(Province = gsub("\\.", " ", Province))  # Replace dot with space
-    
     
     # Find the province with the lowest Unemployment rate
     input_unemployment_df <- data %>% 
@@ -278,6 +282,11 @@ server <- function(input, output) {
       summarise_all(min, na.rm = TRUE) %>%
       pivot_longer(cols = everything(), names_to = "Province", values_to = "Unemployment.rate") %>%
       mutate(Province = sub("^Unemployment\\.rate_", "", Province))  # Remove Unemployment.rate_ prefix
+    
+    
+    # Clean the Province names (replace dots with spaces)
+    input_unemployment_df <- input_unemployment_df %>%
+      mutate(Province = gsub("\\.", " ", Province))  # Replace dot with space
     
     lowest_unemployment <- input_unemployment_df %>%
       arrange(Unemployment.rate) %>%
@@ -293,7 +302,7 @@ server <- function(input, output) {
       ggplot(input_unemployment_df, aes(x = Province)) + 
         geom_bar(aes(y = Unemployment.rate, fill = Unemployment.rate), stat = "identity") + 
         labs(title = "Unemployment rate by Province", x = "Province", y = "Unemployment rate") +
-        scale_fill_gradient(low = "skyblue", high = "brown1", name = "Unemployment.rate") +
+        scale_fill_gradient(low = "skyblue", high = "brown1", name = "Unemployment rate") +
         coord_flip() +
         theme(
           plot.title = element_text(face = "bold", size = 24, color = "darkgrey"),   # Title
